@@ -86,7 +86,7 @@ class _PhotoUploadState extends State<PhotoUpload>{
 
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
-      await Firestore.instance.collection('blogs').document(user.uid)
+      await Firestore.instance.collection('blogs').document(now.toString())
           .setData({ 'description': _myValue , 'image': url, 'date':  formattedDate.toString(), 'time': formattedTime.toString()});
 
       print("success");
