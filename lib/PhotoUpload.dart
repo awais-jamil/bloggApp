@@ -2,8 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'Authentication.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class PhotoUpload extends StatefulWidget{
+
+  final AuthImplementation auth;
+  final db = Firestore.instance;
+
+  PhotoUpload({
+    this.auth,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -17,6 +27,7 @@ class _PhotoUploadState extends State<PhotoUpload>{
   File sampleImage;
   final _formKey =  new GlobalKey<FormState>();
   String _myValue;
+  String url;
 
   Future getImage() async {
     var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -34,6 +45,36 @@ class _PhotoUploadState extends State<PhotoUpload>{
       return true;
     } else {
       return false;
+    }
+  }
+
+  void uploadImageAndSaveBlog() async {
+
+    if(validateAndSave()) {
+      final StorageReference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('post images');
+
+      var timeKey = DateTime.now();
+
+      final StorageUploadTask uploadTask = storageReference.child(timeKey.toString()+ ".jpg").putFile(sampleImage);
+
+      var imageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+      print('File Uploaded');
+        setState(() {
+          url = imageUrl;
+        });
+      uploadBlog();
+    }
+  }
+
+  void uploadBlog() async {
+    if(validateAndSave()){
+
+      String uid = await widget.auth.GetCurrentUser();
+
+      await Firestore.instance.collection('blogs').document(uid)
+          .setData({ 'title': 'title', 'author': 'author' });
     }
   }
 
@@ -87,7 +128,7 @@ class _PhotoUploadState extends State<PhotoUpload>{
                   textColor: Colors.white,
                   color: Colors.blue,
 
-                  onPressed: validateAndSave,
+                  onPressed: uploadImageAndSaveBlog,
                 )
 
               ],
