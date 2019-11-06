@@ -23,8 +23,10 @@ class Auth implements AuthImplementation{
 
   Future<String> SignUp(String email, String password) async {
 
-    FirebaseUser user = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password) as FirebaseUser;
+    AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
 
+    final FirebaseUser user = result.user;
+    print('signInEmail succeeded: $user');
     return user.uid;
   }
 
