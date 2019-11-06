@@ -38,12 +38,16 @@ class _MainTabBarState extends State<MainTabBar> {
     super.initState();
 
     _home = HomeTab();
-    _upload = PhotoUpload();
+    _upload = PhotoUpload(onSwitchTab: _switchTab);
 
     _pages = [_home, _upload];
 
     _currentIndex = 0;
     _currentPage = _home;
+  }
+
+  void _switchTab(){
+    changeTab(0);
   }
 
   void changeTab(int index) {
@@ -75,7 +79,6 @@ class _MainTabBarState extends State<MainTabBar> {
 
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

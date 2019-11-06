@@ -11,9 +11,11 @@ class PhotoUpload extends StatefulWidget{
 
   final AuthImplementation auth;
   final db = Firestore.instance;
+  final VoidCallback onSwitchTab;
 
   PhotoUpload({
     this.auth,
+    this.onSwitchTab
   });
 
   @override
@@ -29,6 +31,7 @@ class _PhotoUploadState extends State<PhotoUpload>{
   final _formKey =  new GlobalKey<FormState>();
   String _myValue;
   String url;
+  bool _isLoading = false;
 
   Future getImage() async {
     var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -52,6 +55,11 @@ class _PhotoUploadState extends State<PhotoUpload>{
   void uploadImageAndSaveBlog() async {
 
     if(validateAndSave()) {
+
+      setState(() {
+        _isLoading = true;
+      });
+
       final StorageReference storageReference = FirebaseStorage.instance
           .ref()
           .child('post images');
@@ -82,6 +90,12 @@ class _PhotoUploadState extends State<PhotoUpload>{
           .setData({ 'description': _myValue , 'image': url, 'date':  formattedDate.toString(), 'time': formattedTime.toString()});
 
       print("success");
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      widget.onSwitchTab();
     }
   }
 
@@ -132,11 +146,25 @@ class _PhotoUploadState extends State<PhotoUpload>{
                   color: Colors.blue,
 
                   onPressed: uploadImageAndSaveBlog,
-                )
+                ),
 
+                SizedBox(height: 20.0),
+
+                showCircularProgress()
               ],
             )
         )
     );
   }
+
+  Widget showCircularProgress() {
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+    return Container(
+      height: 0.0,
+      width: 0.0,
+    );
+  }
+
 }

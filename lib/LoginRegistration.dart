@@ -63,14 +63,12 @@ class _LoginRegistrationState extends State<LoginRegistration>{
           setState(() {
             _isLoading = false;
           });
-//          dialogBox.information(context, "Congratulations", "Successfully LoggedIn");
        } else {
          String userId = await widget.auth.SignUp(_email, _password);
          print("SignUp UserID:" + userId);
          setState(() {
            _isLoading = false;
          });
-//         dialogBox.information(context, "Congratulations", "Your account is successfully created");
        }
 
        widget.onSignedIn();
