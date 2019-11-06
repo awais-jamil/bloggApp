@@ -82,11 +82,6 @@ class _PhotoUploadState extends State<PhotoUpload>{
   Widget build(BuildContext context) {
       return new Scaffold(
 
-        appBar: new AppBar(
-
-          title: new Text("Photo Upload"),
-          centerTitle: true,
-        ),
         body: new Center(
 
           child:  sampleImage == null? Text("Select Image"): enableUpload(),

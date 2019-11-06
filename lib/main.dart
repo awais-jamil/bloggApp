@@ -1,5 +1,3 @@
-import 'package:bloggapp/HomePage.dart';
-import 'package:bloggapp/LoginRegistration.dart';
 import 'package:flutter/material.dart';
 import 'Authentication.dart';
 import 'Mapping.dart';

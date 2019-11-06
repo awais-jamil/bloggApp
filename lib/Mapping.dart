@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'LoginRegistration.dart';
-import 'HomePage.dart';
 import 'Authentication.dart';
+import 'MainTabBar.dart';
 
 class MappingPage extends StatefulWidget{
 
@@ -60,7 +60,7 @@ class _MappingPageState extends State<MappingPage>{
           onSignedIn: _signedIn,
         );
       case AuthStatus.signedIn:
-        return new HomePage(
+        return new MainTabBar(
           auth:  widget.auth,
           onSignedOut: _signedOut,
         );
