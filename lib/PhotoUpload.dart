@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Authentication.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PhotoUpload extends StatefulWidget{
 
@@ -71,10 +72,16 @@ class _PhotoUploadState extends State<PhotoUpload>{
   void uploadBlog() async {
     if(validateAndSave()){
 
-      String uid = await widget.auth.GetCurrentUser();
+      DateTime now = DateTime.now();
+      String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+      String formattedTime= DateFormat(' hh:mm a').format(now);
 
-      await Firestore.instance.collection('blogs').document(uid)
-          .setData({ 'title': 'title', 'author': 'author' });
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+      await Firestore.instance.collection('blogs').document(user.uid)
+          .setData({ 'description': _myValue , 'image': url, 'date':  formattedDate.toString(), 'time': formattedTime.toString()});
+
+      print("success");
     }
   }
 
@@ -98,6 +105,7 @@ class _PhotoUploadState extends State<PhotoUpload>{
   Widget enableUpload(){
 
     return Container(
+        margin: EdgeInsets.all(15.0),
         child: new Form(
             key: _formKey,
             child: new Column(
