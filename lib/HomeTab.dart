@@ -67,7 +67,7 @@ class _HomeTabState extends State<HomeTab>{
                     textAlign: TextAlign.center,
                   ),
                   new Text(
-                    blog.date,
+                    blog.time,
                     style: Theme.of(context).textTheme.subtitle,
                     textAlign: TextAlign.center,
                   )
